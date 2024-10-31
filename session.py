@@ -4,7 +4,9 @@ import datetime, time, requests
 # started from: https://github.com/jldbc/pybaseball/blob/master/pybaseball/datasources/bref.py
 class Session():
 
-    def __init__(self) -> None:
+    def __init__(self, max_per_min : int = 10) -> None:
+
+        self.max_per_min = max_per_min
         self.cnt = 0
         self.session = requests.Session()
 
@@ -17,7 +19,7 @@ class Session():
         
         self.cnt += 1
         
-        if self.cnt % 10 == 0:
+        if self.cnt % self.max_per_min == 0:
             print(F"have called {self.cnt} apis: 1 min break starts") 
             time.sleep(60) 
         
@@ -26,7 +28,7 @@ class Session():
     Behavior: general api call with given url -> return data in json format(dict)
     Usage: called inside other api call functions.
     '''
-    def fetch(self, url) -> requests.Response:
+    def fetch(self, url : str) -> requests.Response:
 
         response = self.session.get(url)
         self.handle_call_rate()
@@ -41,3 +43,13 @@ class Session():
                 fetch(url)
             
         return response
+
+
+
+
+
+
+
+
+
+        
