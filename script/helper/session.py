@@ -1,6 +1,6 @@
 import datetime, time, requests
 
-# only 10 requests per minute.
+# only 10 requests per minute by default (for baseball-reference)
 # started from: https://github.com/jldbc/pybaseball/blob/master/pybaseball/datasources/bref.py
 class Session():
 
@@ -43,13 +43,4 @@ class Session():
                 fetch(url)
             
         return response
-
-
-
-
-
-
-
-
-
         
