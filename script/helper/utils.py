@@ -1,4 +1,61 @@
 '''
+Used to merge uncommon notations for a given last name into the most common notation.
+criteria for chooing the standard notation:
+    1. Avoided 'u' as much as I could because it is one of the main reasons for the naming conflict, which can be pronounced in various ways.
+        1.1. if 'u' was used to represent 'ㅜ', replace it to "oo".
+        1.2. if 'u' was used to represent 'ㅓ', replace it to 'eo'.
+    2. Avoided negative words or common word ex) 'no', 'an', 'go', 'im'.
+        2-1. 'park' and 'moon' are exceptions, because they have already been too popular and common.
+    3. Avoided 'g', as much as I could because it may confuse english speakers (great and giant sound different).
+'''
+last_name_dict_kor = {
+    "yun": "yoon", # check 연 -> no conflict (good)
+    "chung": "jeong",
+    "jung": "jeong", # check 중 -> no such last name (good)
+    "jun": "jeon", # check 준 -> no such last name (good)
+    "an": "ahn",
+    "chang": "jang", #check 창 -> no such last name (good)
+    "gwak": "kwak",
+    "pae": "bae",
+    "paek": "baek",
+    "back": "baek",
+    "pak": "park", # pak is never 백? not sure -> manually check, no conflict (good)
+    "im": "lim",
+    "sim": "shim",
+    "gwon": "kwon",
+    "jo": "cho",
+    "gu": "koo",
+    "ku": "koo",
+    "chou": "choi",
+    "go": "ko",
+    "mun": "moon",
+    "yu": "yoo",
+    "wu": "woo",
+    "bang": "pang",
+    "no": "noh",
+    "roh": "noh",
+    "byun": "byeon",
+    "gong": "kong",
+    "senyu": "seonwoo",
+    "seonu": "seonwoo",
+    "jeun": "jeon",
+    "hur": "heo",
+    
+}
+
+given_name_dict_kor = {
+    "u": "woo",
+    "been": "bin",
+    "see": "si",
+    "wahn": "wan",
+}
+
+non_korean_name_dict_eng = {
+    "aarona ltherr" = "aaron altherr",
+    "andrew" = "andy
+}
+
+'''
 Helper function 1
 Behavior: Parse the given URL and return its ct_code and year.
 Usage: called in team_url_to_back_number_url to pre-process the URL. Also Used in st_player.ipynb to keep track of the appending process.
@@ -69,9 +126,9 @@ def team_url_to_back_number_url(team_url: str) -> str:
     # Hanwha Eagles (한화 이글스), 1994 - 2024
     elif ct_code == 7:
         if year <= 2000:
-            t_code = 2001
+            t_code = 7001
         else:
-            t_code = 2002
+            t_code = 7002
 
     # Ssangbangwool Raiders (쌍방울 레이더스), 1991 - 1999
     elif ct_code == 8:
@@ -103,6 +160,97 @@ def team_url_to_back_number_url(team_url: str) -> str:
 
     back_number_url = f"https://statiz.sporki.com/team/?m=seasonBacknumber&t_code={t_code}&year={year}"
     return back_number_url
+
+'''
+Helper function 3
+Behavior: Parse the given name and return the first and last name (in terms of word, not character) -> use it for English name only.
+Usage: used to extract first and last name of non-Korean players, which resolved a decent amount of naming conflict.
+'''
+
+def eng_get_first_and_last(name: str) -> str:
+    split = name.split(" ")
+
+    # 'jr' is not helpful for distinguishing players
+    if split[-1].contains["jr"]:
+        split = split[-1]
+    
+    if len(split) > 2:
+        return split[0] + " " + split[-1]
+    else:
+        return " ".join(split)
+
+
+
+'''
+Helper function 4
+Behavior: Parse the given name and return the last name (in terms of character, not word) -> use it for Korean name only.
+Usage: used to check if players with rare last name exist (otherwise merge them into the common notation for that last name to resolve naming conflict)
+'''
+def kor_get_last(name_kor_list: list[str], last_name: str) -> list[str]:
+    found = list()
+    for name in name_kor_list:
+        if name[0] == last_name:
+            found.append(name)
+    return found
+
+
+'''
+Helper function 5
+Behavior: Parse the given name and check if the last name is in the last_name_dict for generalization (a consistent notation for last names), and if so, update it.
+Usage: used to generalize last names to reduce naming conflict.
+'''
+def kor_update_last(name: str) -> str:
+    
+    name_split = name.split(" ")
+
+    if len(name_split) > 1 and name_split[-1] in last_name_dict:
+        name_split[-1] = last_name_dict[name_split[-1]]
+        return " ".join(name_split)
+    else:
+        return name
+
+
+def kor_update_given(df, name: str) -> str:
+
+    df_br = df[df['name_eng_y'].isna()]
+    df_st = df[df['name_eng_x'].isna()]
+
+    df_br_set = set(df_br["name_new"].to_list())
+    df_st_set = set(df_st["name_new"].to_list())
+
+
+def kor_update_given_2(name_input: str, opposite_set: set[str]) -> str:
+
+    name_split = name_input.split(" ")
+
+    if len(name_split) > 1:
+        given_name = name_split[:-1]
+
+        for i in range(len(given_name)):
+            if given_name[i] in given_name_dict_kor:
+                given_name[i] = given_name_dict_kor[given_name[i]]
+
+            if given_name[i].contains('u'):
+                chr_cdd_1 = given_name[i][:].replace('u', 'eo')
+                chr_cdd_2 = given_name[i][:].replace('u', 'oo')
+
+                name_cdd = given_name[:]
+                
+    
+    else:
+        return name_input
+
+    
+    
+    
+
+
+
+
+        
+
+    
+
 
 
         
