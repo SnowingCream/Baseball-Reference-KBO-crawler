@@ -1,6 +1,35 @@
 import pandas as pd
 from typing import Callable, Union
-from helper.ref_dict import last_name_dict_kor, first_name_dict_kor, manual_handle_dict
+from helper.ref_dict import last_name_dict_kor, first_name_dict_kor, first_name_dict_eng, manual_handle_dict, recover_dash_dict
+from collections import defaultdict
+
+
+def recover_dash(name: str) -> str:
+    if name in recover_dash_dict:
+        return recover_dash_dict[name]
+    return name
+
+def remove_double_dash(name: str) -> str:
+
+    
+    if name in recover_dash_dict:
+        return recover_dash_dict[name]
+    return name
+
+def check_uniqueness(candidate_1: str, candidate_2: str, default_return: str, checker: set[str]) -> str:
+
+    if candidate_1 in checker and candidate_2 in checker:
+        print(f"given name: {default_return} -> both exist")
+        return default_return
+    if candidate_1 not in checker and candidate_2 not in checker:
+        print(f"given name: {default_return} -> neither exists")
+        return default_return
+    if candidate_1 in checker:
+        print(f"given name: {default_return} -> found the unique match")
+        return candidate_1
+    if candidate_2 in checker:
+        print(f"given name: {default_return} -> found the unique match")
+        return candidate_2
 
 '''
 Helper function 1
@@ -115,16 +144,20 @@ def kor_handle_u(row: pd.DataFrame, candidates: set[str]) -> str:
 
                 # print(f"given name: {row['name_new']} -> oo: {first_name_copy_oo}, eo: {first_name_copy_eo}")
 
-                if first_name_copy_oo not in candidates and first_name_copy_eo not in candidates:
-                    print(f"given name: {row['name_new']} -> neither exists")
-                    return row['name_new']
-                if first_name_copy_oo in candidates and first_name_copy_eo in candidates:
-                    print(f"given name: {row['name_new']} -> both exist")
-                    return row['name_new']
-                if first_name_copy_oo in candidates:
-                    return first_name_copy_oo
-                if first_name_copy_eo in candidates:
-                    return first_name_copy_eo
+                # if first_name_copy_oo not in candidates and first_name_copy_eo not in candidates:
+                #     print(f"given name: {row['name_new']} -> neither exists")
+                #     return row['name_new']
+                # if first_name_copy_oo in candidates and first_name_copy_eo in candidates:
+                #     print(f"given name: {row['name_new']} -> both exist")
+                #     return row['name_new']
+                # if first_name_copy_oo in candidates:
+                #     print(f"given name: {row['name_new']} -> found the unique match")
+                #     return first_name_copy_oo
+                # if first_name_copy_eo in candidates: 
+                #     print(f"given name: {row['name_new']} -> found the unique match")
+                #     return first_name_copy_eo
+
+                return check_uniqueness(first_name_copy_oo, first_name_copy_eo, row['name_new'], candidates)
 
         # print(f"given name: {row['name_new']} -> what case is this???") -> never happens
 
@@ -148,23 +181,156 @@ def eng_remove_jr(name: str) -> str:
     return name
 
 
-# def eng_handle_rare_last_name(row: pd.DataFrame,  
+def eng_handle_rare_last_name(row: pd.DataFrame, last_name_total: dict[str, int], last_name_st: dict[str, int], last_name_br: dict[str, int]) -> str:
 
+    last_name = row['name_new'].split(" ")[-1]
+
+    # if the last name only appears once per each side and therefore total of 2, then it is a single player with that last name.
+    if last_name_total[last_name] == 2 and last_name_st[last_name] == 1 and last_name_br[last_name] == 1:
+        return last_name + " (unique last name)"
+
+    return row['name_new']
+
+# only works from the statiz side, because it made sure that all Korean players has '-' in their name (single first name doesn't apply, but still can be handled by checking the number of letters inside the function)
+# use dict unlike handle u function, because non-Korean players
+def eng_check_possible_match(row: pd.DataFrame, br_candidates: set[str]) -> str:
+
+    # if the english name doesn't contain '-', it is a Korean player.
+    if "-" in row['name_eng_y']: 
+        # print(f"given name: {row['name_new']} -> not a valid input")
+        return row['name_new']
+
+    name_split = row["name_new"].split(" ")
+    
+
+    # this is the case of no middle name for non-Korean players, or a single first name for Korean players.
+    if len(name_split) == 2:
+
+        # sometimes names are flipped (usually japanese players)
+        name_candidate = name_split[-1] + " " + name_split[0]
+        if name_candidate in br_candidates:
+            print(f"given name: {row['name_new']} -> found the unique match")
+            return name_candidate
+        
+
+        # Korean players and non-mathcing cases for non-Korean players will be filtered here.
+        if name_split[0] in first_name_dict_eng:
+            name_split[0] = first_name_dict_eng[name_split[0]]
+            name_candidate = ' '.join(name_split)
+            
+            # if the substituted name exists, up date it.
+            if name_candidate in br_candidates:
+                print(f"given name: {row['name_new']} -> found the unique match")
+                return name_candidate
+        return row['name_new']
+
+    elif len(name_split) == 3:
+
+        
+        name_candidate_1 = name_split[0] + " " + name_split[-1]
+        name_candidate_2 = name_split[0] + " " + name_split[1]
+
+        check_original = check_uniqueness(name_candidate_1, name_candidate_2, row['name_new'], br_candidates)
+
+        if check_original != row['name_new']:
+            return check_original
+
+        if name_split[0] in first_name_dict_eng:
+
+            name_split[0] = first_name_dict_eng[name_split[0]]
+            name_candidate_1 = name_split[0] + " " + name_split[-1]
+            name_candidate_2 = name_split[0] + " " + name_split[1]
+            
+            return check_uniqueness(name_candidate_1, name_candidate_2, row['name_new'], br_candidates)
+
+        else:
+            return row['name_new']
+
+
+        # if name_candidate_1 not in br_candidates and name_candidate_2 not in br_candidates:
+        #     print(f"given name: {row['name_new']} -> neither exists, repeat the same with nicknames")
+
+        #     if name_split[0] in first_name_dict_eng:
+        #         name_candidate_1[0] = first_name_dict_eng[name_split[0]]
+        #         name_candidate_2[0] = first_name_dict_eng[name_split[0]]
+                
+            
+        #     return row['name_new']
+        # if name_candidate_1 in br_candidates and name_candidate_2 in br_candidates:
+        #     print(f"given name: {row['name_new']} -> both exist")
+        #     return row['name_new']
+        # if name_candidate_1 in br_candidates:
+        #     potential_dup = name_candidate_1.split(" ")
+        #     if potential_dup[0] in first_name_dict_eng:
+        #         potential_dup[0] = first_name_dict_eng[potential_dup[0]]
+        #         potential_dup = ' '.join(potential_dup)
+        #         if potential_dup in br_candidates:
+        #             print(f"given name: {row['name_new']} -> potential dup (nickname) exists!!!!!!!!!!")
+        #             return row['name_new']
+        #     print(f"given name: {row['name_new']} -> found the unique match")
+        #     return name_candidate_1        
+        # if name_candidate_2 in br_candidates:
+        #     potential_dup = name_candidate_2.split(" ")
+        #     if potential_dup[0] in first_name_dict_eng:
+        #         potential_dup[0] = first_name_dict_eng[potential_dup[0]]
+        #         potential_dup = ' '.join(potential_dup)
+        #         if potential_dup in br_candidates:
+        #             print(f"given name: {row['name_new']} -> potential dup (nickname) exists!!!!!!!!!!")
+        #             return row['name_new']
+        #     print(f"given name: {row['name_new']} -> found the unique match")
+        #     return name_candidate_2  
+            
+    elif len(name_split) == 4:
+        name_candidate = name_split[0] + " " + name_split[2]
+        if name_candidate in br_candidates:
+            print(f"given name: {row['name_new']} -> found the unique match")
+            return name_candidate
+
+        return row['name_new']
+        
+    
+    else:
+        print(f"given name: {row['name_new']} -> has not been implemented yet")
+        return row['name_new']
 
 
 def manual_merge(inner: pd.DataFrame, outer: pd.DataFrame, criterion: Callable[[pd.DataFrame, set[str]], str]) -> tuple[pd.DataFrame, pd.DataFrame]:
 
     df_br = outer[outer['name_eng_y'].isna()].dropna(axis=1)
     df_st = outer[outer['name_eng_x'].isna()].dropna(axis=1)
-    df_br_set = set(df_br["name_new"].to_list())
-    df_st_set = set(df_st["name_new"].to_list())
-    # print(df_br.head(3))
-    # print(df_st.head(3))
+
 
     if criterion.__name__ == 'kor_handle_u':
+
+        df_br_set = set(df_br["name_new"].to_list())
+        df_st_set = set(df_st["name_new"].to_list())
+        
         df_br['name_new'] = df_br.apply(kor_handle_u, args=(df_st_set,), axis=1)
         df_st['name_new'] = df_st.apply(kor_handle_u, args=(df_br_set,), axis=1)
-        print('successful calling function')
+
+    elif criterion.__name__ == 'eng_handle_rare_last_name':
+
+        last_name_total, last_name_st, last_name_br = defaultdict(int), defaultdict(int), defaultdict(int)
+
+        for name in df_br['name_new'].to_list():
+            last_name = name.split(" ")[-1]
+            last_name_total[last_name] += 1
+            last_name_br[last_name] += 1
+
+        for name in df_st['name_new'].to_list():
+            last_name = name.split(" ")[-1]
+            last_name_total[last_name] += 1
+            last_name_st[last_name] += 1
+        
+        df_br['name_new'] = df_br.apply(eng_handle_rare_last_name, args=(last_name_total, last_name_st, last_name_br), axis=1)
+        df_st['name_new'] = df_st.apply(eng_handle_rare_last_name, args=(last_name_total, last_name_st, last_name_br), axis=1)        
+
+    elif criterion.__name__ == 'eng_check_possible_match':
+        df_br_set = set(df_br["name_new"].to_list())
+        df_st['name_new'] = df_st.apply(eng_check_possible_match, args=(df_br_set,), axis=1)
+    
+    else:
+        raise SystemExit('Not a valid criterion function name')
     
     
     new_inner = pd.merge(df_br, df_st, on='name_new', how='inner')

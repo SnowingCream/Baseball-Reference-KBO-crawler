@@ -92,6 +92,8 @@ last_name_dict_kor = {
     "you": "yoo",
     "aum": "eom",
     "gye": "kye",
+    "chin": "jin",
+    "sung": "seong",
     
     
 
@@ -100,18 +102,22 @@ last_name_dict_kor = {
 
 first_name_dict_kor = {
     "u": "woo", # no 어? guess it's fine
+    "i": "yi",
+    "o": "oh",
     "been": "bin",
     "see": "si",
     "sin": "shin",
     "wahn": "wan",
     "yu": "yoo",
-    "young": "yeong",
     "gi": "ki",
     "suh": "seo",
     "seop": "seob",
     "sup": "seob",
-    "gyu": "kyu",
-    "geun": "keun",
+    "yeop": "yeob",
+    "yup": "yeob",
+    "hyeop": "hyeob",
+    "hyub": "hyeob",
+    # "kun": "koon",
     "ttaum": "tteum",
     # "gap": "gab", # there is 갑 (홍성갑)
     "june": "joon", 
@@ -120,12 +126,81 @@ first_name_dict_kor = {
     "sub": "seob", # no 숩, so it's fine
     "guk": "kook", # no 걱, so it's fine
     "hyuk": "hyeok", # no 휵, so it's fine
+    "hyun": "hyeon", # no 휸, so it's fine
     "ju": "joo", # no 저, so it's fine
+    "ung": "woong", # no 엉, so it's fine
     "hsiang": "sang",
     "oug": "wook",
     "yol": "yeol",
+    "uk": "wook", # cases of 억 have been handled (checked both br and st)
+    "un": "woon", # cases of 언 have been handled (checked both br and st)
+    "chul": "cheol", # no 출, so it's fine
+    "gook": "kook",
+    "dai": "dae",
+    "hai": "hae",
+    "ick": "ik",
+    "deog": "deok",
+    "duck": "deok", # no 둑, so it's fine
+    "duk": "deok", 
+    "hack": "hak",
+    "gu": "goo", # cases of 거 have been handled (checked both br and st)
+    "gang": "kang",
+    "gil": "kil",
+    "go": "ko",
+    "gu": "koo",
+    "gwan": "kwan", # no 좐, so it's fine
+    "geun": "keun", # no 즌, so it's fine
+    "geon": "keon", # conventional 
+    "gyu": "kyu", # conventional
+    "gyeom": "kyeom",
+    "gyeong": "kyeong", # conventional
+    "gwang": "kwang", # no 좡, so it's fine
+    "jip": "jib",
+    "ku": "koo",
+    "sung": "seong",
+    "hyoun": "hyeon",
+    "no": "noh",
+    "back": "baek",
+    "youl": "yeol",
+    "jung": "jeong", # handled all 중
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 }
+
+recover_dash_dict = {
+    "Um Pyungjae": "Pyeong-Jae Eom", # 엄평재, flipped format, no -
+    "Seungchul Yang": "Seung-Cheol Yang", # 양승철, no -
+    "Byunggeol Woo": "Byeong-Geol Woo", # 우병걸, no -
+    "Park Seunghoon": "Seung-Hoon Park", # 박승훈, fillped format, no -
+    "Son Ho Won": "Ho-Won Sohn", # 손호원, flipped format, no -
+    "Park Sion": "Si-On Park", # 박시온, flipped format, no -
+    "Kiyoung Moon": "Ki-Yeong Moon", # 문기영, no -
+    "Chilsung Park": "Chil-Seong Park", # 박칠성, no -
+    "Yeop Sagong": "Gong-Yeop Sa", # 사공엽, flipped format, no -
+    "Chae Wonhu": "Won-Hoo Chae", # 채원후, flipped format, no -
+    "Jun Rugun": "Roo-Geon Jeon", # 전루건, flipped format, no -
+    "Giho Park": "Ki-Ho Park", # 박기호, no -
+    "Kim Donghyeok": "Dong-Hyeok Kim", # 김동혁, flipped format, no -
+    "Hawon Jeon": "Ha-Won Jeon", # 전하원, no -
+    "Kim Gyudae": "Gyoo-Dae Kim", # 김규대, flipped format, no -
+    "Han Minwoo": "Min-Woo Han", # 한민우, flipped format, no -
+    "Lee Hyeonmin": "Hyeon-Min Lee", # 이현민, flipped format, no -
+    "Rian Kim": "Ri-An Kim", # 김리안, no -
+    "Shin Wojae": "Woo-Jae Shin", # 신우재, flipped format, no -
+    "Pilljoon Jang": "Pill-Joon Jang", # 장필준, no - (br)
+    "ByungHo Park": "Byeong-Ho Park", # 박병호, no - (br)
+    "Hyeseong Kim": "Hye-Seong Kim", # 김혜성, no - (br)
+    
+}
+
 
 '''
 1-to-1 correction for unique cases that must be manually handled: usually typo, with some rare names
@@ -138,39 +213,26 @@ manual_handle_dict = {
     "noh jae won": "jae won noh", # flipped format
     "nam yun sung": "yun sung nam", # flipped format
     "park tae won": "tae won park", # flipped format
-    "park seunghoon": "seung hoon park", # fillped format, no -
-    "pilljoon jang": "pill joon jang", # no -
-    "shin  ho lim": "shin ho lim", # extra space
-    "dan woo  kim": "dan woo kim", # extra space
-    "shin wojae": "woo jae shin", # flipped format, no -
-    "chae wonhu": "won hoo chae", # flipped format, no -
     "das sung koo": "dae seong koo", # typo
     "jose para": "jose parra", # typo
-    "julio depaula": "julio de paula", # missing space
+    "julio cesar depaula": "julio de paula", # missing space
     "rick vandenhurk": "rick van den hurk", # missing space
     "kevin dattolla": "kevin dattola", # typo
     "ki hyo ahn": "ki hyo nam", # typo
-    "kiyoung moon": "ki young moon", # missing space
     "leang keu beul": "matt blank", # ??????? 
     "lang gyun gil": "rang gyun kil", # unique name, manual match
     "r": "reu", # hard to handle
     "michael bowdent": "michael bowden", # typo
-    "sangr yul jeon": "sang rul jeon", # space typo
+    "sangr yul jeon": "sang ryeol jeon", # space typo
     "scoot baker": "scott baker", # typo
     "satohshi iriki": "satoshi iriki", # unique name, manual match
     "tylor wilson": "tyler wilson", # typo
     "wes obermuller": "wes obermueller", # typo
     "tyrone hornes": "tyrone horne", # typo
     "yu naml": "yool nam", # space typo
-    "yeop sagong": "gong yeop sa", # space typo
     "young jae gp": "young jae ko", # typo
     "soo hyung kjim": "soo hyung kim", # typo
-    "park sion": "si on park", # flipped format, no -
     "lee ju heon": "joo heon lee", # flipped format
-    "lee hyeonmin": "hyeon min lee", # flipped format, no -
-    "kim gyudae": "gyoo dae kim", # flipped format, no -
-    "kim donghyeok": "dong hyeok kim", # flipped format, no -
-    "jun rugun": "roo geon jeon", # flipped format, no -
     "jun pyo jhun": "jun pyo jeon", # typo
     "jo sung hyeon": "seong hyeon jo", # flipped format
     "jo hyo won": "hyo won jo", # flipped format
@@ -178,7 +240,6 @@ manual_handle_dict = {
     "je hwan yoo": "hwan yoo je", # flipped format
     "hong ji hun": "ji hoon hong", # flipped format
     "hong jae young": "jae young hong", # flipped format
-    "han minwoo": "min woo han", # flipped format
     "eom tae kyoung": "tae kyeong eom", # flipped format
     "eom tae ho": "tae ho eom", # flipped format
     "yeong jin do": "yeong jin doo", # unique name, manual match
@@ -191,10 +252,98 @@ manual_handle_dict = {
     "jeung woo seok": "jeong woo seok", # unique name, manual match
     "lee jung seok": "joong seok lee", # flipped format
     "sang guk pang": "sang kook park", # typo
-    "byungho park": "byung ho park", # no -
-    "byunggeol woo": "byung geol woo", # no -
+    "j.r. philllips": "j.r. phillips", # typo
+    "ohkamoto sinya": "okamoto sinya", # typo
     "bubba smith": "charles smith", # unique name, manual match
-    "um pyungjae": "pyeong jae eom", # flipped format, no -
+    "luis manuel de los santos martinez": "luis de los santos", # unique name, manual match
+    "michael serveneck": "mike cervenak", # typo
+    "gustavo karim garcia aguayo": "karim garcia", # unique name, manual match
+    "joshua lee josh bell": "josh bell", # unique name, manual match
+    "kevin heon ju lee": "kevin lee", # unique name, manual match
+    "eum jang yoon": "jang yoon eom", # flipped format
+    "gu sun jung" : "goo seon jung", # double u
+    "bum jun park": "beom joon park", # double u
+    "byung hwee lee": "yoo chan lee", # changed name
+    "chang hun choo": "chang hoon joo", # typo
+    "dong sik chu": "dong sik joo", # typo
+    "chung yeol chou": "chung yeol cho", # typo
+    "sang un park": "sang eon park", # typo (언)
+    "un hak ahn": "eon hak ahn", # typo (언)
+    "il yung kim": "il yoong kim", # typo (융)
+    "don hun kwak": "dong hoon kwak", # typo
+    "donk keun lee": "dong keun lee", # typo
+    "geong gyu park": "jeong kyoo park", # typo
+    "gyeon eon kim": "kyeong eon kim", # typo
+    "hei chun lee": "hye cheon lee", # typo
+    "heo yong joo": "yong joo heo", # typo
+    "myung woom park": "myeong woon park", # typo
+    "nak soo song": "nak soo seong", # typo
+    "myuong ki lee": "myeong ki lee", # typo
+    "sang wahn chu": "sang wan choo", # typo
+    "sang ryul chun": "sang ryul jeon", # typo
+    "seong bhin park": "seong bin park", # typo
+    "sung heon hong": "seong heun hong", # typo
+    "seong jae yang": "seong je yang", # typo
+    "sung geon chu": "seong geon choo", # typo
+    "seong mou ahn": "seong moo ahn", # typo
+    "seung rak son": "seung lak sohn", # typo
+    "tae lyong kim": "tae ryong kim", # typo
+    "seong woo choo": "seung woo choo", # typo
+    "tae yean kim": "tae yeon kim", # typo
+    "tae youn lee": "tae yeon lee", # typo
+    "tong keon yeo": "dong keon yeo", # typo
+    "jea jung chang": "jae joong jang", # typo
+    "ui ji yang": "eui ji yang", # typo
+    "pil jung jin": "pil joong jin", # removing 중 to handle jung (st)
+    "jung il ryu": "joong il ryu",  # removing 중 to handle jung (st)
+    "jung geun cho": "joong keun cho",  # removing 중 to handle jung (st)
+    "jung keun bong": "joong keun bong",  # removing 중 to handle jung (st)
+    "wang jung baek": "wang joong baek",  # removing 중 to handle jung (st)
+    "jung yeol an": "joong yeol ahn",  # removing 중 to handle jung (st)
+    "young jung kim": "yeong joong kim",  # removing 중 to handle jung (st)
+    "won jung kim": "won joong kim", # removing 중 to handle jung (br)
+    "ho jung lee": "ho joong lee", # removing 중 to handle jung (br)
+    "se jung kim": "se joong kim", # removing 중 to handle jung (br)
+    "gap jung kim": "gap joong kim", # removing 중 to handle jung (br)
+    "jung hwa lee": "joong hwa lee", # removing 중 to handle jung (br)
+    "dae jung kim": "dae joong kim", # removing 중 to handle jung (br)
+    "jung seok cho": "joong seok cho", # removing 중 to handle jung (br)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    # "shin  ho lim": "shin ho lim", # extra space
+    # "chang  yang choi": "chang yang choi", # extra space
+    # "dan woo  kim": "dan woo kim", # extra space
 }
 
 first_name_dict_eng = {
@@ -206,6 +355,7 @@ first_name_dict_eng = {
     "benjamin": "ben",
     "bradley": "brad",
     "chadwick": "chad",
+    "charles": "chuck",
     "christopher": "chris",
     # "daniel": "dan",
     "roberto": "robert",
