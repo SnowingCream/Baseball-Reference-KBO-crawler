@@ -159,6 +159,7 @@ first_name_dict_kor = {
     "gyu": "kyu", # conventional
     "gyo": "kyo", # conventional
     "gyeom": "kyeom",
+    "gyeol": "kyeol", # no 졀, so it's fine
     "gyeong": "kyeong", # conventional
     "gwang": "kwang", # no 좡, so it's fine
     "gyun": "kyun", # no 쥰, so it's fine
@@ -199,6 +200,7 @@ first_name_dict_kor = {
     "hoe": "hoi", # 회
     "ui": "eui", # 의
     "gui": "gwi",
+    "sig": "sik",
     
     
     
@@ -237,7 +239,6 @@ recover_dash_dict = {
     "ByungHo Park": "Byeong-Ho Park", # 박병호, no - (br)
     "Hyeseong Kim": "Hye-Seong Kim", # 김혜성, no - (br)
     "Seunghwan Oh": "Seung-Hwan Oh", # 오승환, no - (br)
-    
 }
 
 
@@ -245,80 +246,59 @@ recover_dash_dict = {
 1-to-1 correction for unique cases that must be manually handled: usually typo, with some rare names
 '''
 manual_handle_dict = {
+
+    # Non-Korean Players case (fix to match the BR name)
+    
     "aarona ltherr": "aaron altherr", # space typo
-    "seok sang ho": "sang ho seok", # flipped format
-    "seol jae min": "jae min seol", # flipped format
-    "no gun woo": "keon woo noh", # flipped format
-    "noh jae won": "jae won noh", # flipped format
-    "nam yun sung": "yun sung nam", # flipped format
-    "park tae won": "tae won park", # flipped format
-    "das sung koo": "dae seong koo", # typo
-    "su yeoun kim": "soo yeon kim", # typo
-    "jose para": "jose parra", # typo
+    "jose para": "jose parra", # wrong name
     "julio cesar depaula": "julio de paula", # missing space
     "rick vandenhurk": "rick van den hurk", # missing space
-    "kevin dattolla": "kevin dattola", # typo
+    "kevin dattolla": "kevin dattola", # wrong name
+    "leang keu beul": "matt blank", # English read in Korean then read in English again
+    "michael bowdent": "michael bowden", # wrong name
+    "satohshi iriki": "satoshi iriki", # different notations
+    "tylor wilson": "tyler wilson", # typo
+    "wes obermuller": "wes obermueller", # typo
+    "tyrone hornes": "tyrone horne", # typo
+    "scoot baker": "scott baker", # typo
+    "j.r. philllips": "j.r. phillips", # typo
+    "ohkamoto sinya": "okamoto sinya", # typo
+    "bubba smith": "charles smith", # unique name, manual match
+    "luis manuel de los santos martinez": "luis de los santos", # unique name, manual match
+    "michael serveneck": "mike cervenak", # typo
+    "gustavo karim garcia aguayo": "karim garcia", # unique name, manual match
+    "joshua lee josh bell": "josh bell", # unique name, manual match
+
+    "yu naml": "yool nam", # space typo
+    "das sung koo": "dae seong koo", # typo
+    "su yeoun kim": "soo yeon kim", # typo
     "ki hyo ahn": "ki hyo nam", # typo
     "kwang kuen lee": "kwang keun lee", # typo
     "soo sung kang": "koo seong kang", # typo
     "soung hun kim": "seong hun kim", # typo
-    "duck gyoon hwang": "deok kyoon hwang", # unique name, manual match
-    "leang keu beul": "matt blank", # ??????? 
-    "lang gyun gil": "rang gyun kil", # unique name, manual match
     "hyuk kim": "nyeok kim", # typo
-    "mi r jeon": "mi reu jeon", # unique name, manual match
-    "michael bowdent": "michael bowden", # typo
     "sangr yul  jeon": "sang ryeol jeon", # space typo WHY NOT WORKING???
-    "scoot baker": "scott baker", # typo
     "min guk song": "min kook seong", # typo
-    "satohshi iriki": "satoshi iriki", # unique name, manual match
-    "tylor wilson": "tyler wilson", # typo
-    "wes obermuller": "wes obermueller", # typo
-    "tyrone hornes": "tyrone horne", # typo
     "kyung oan park": "kyeong wan park", # typo
     "moung chan kim": "myeong chan kim", # typo
     "seung hye kim": "seung hoi kim",  # typo
     "myeoung jin cha": "myeong jin cha", # typo
-    "young hun cho": "yong hoon cho", # typo
     "seong kon kim": "seung kwon kim",  # typo
     "myeong nok oh": "myeong rok oh", # typo
     "myeong jae kim": "myeong je kim",  # typo
     "hwi chan jung": "hoi chan jeong", # typo
     "min je jang": "min jae jang", # typo
-    "yu naml": "yool nam", # space typo
     "young jae gp": "young jae ko", # typo
     "soo hyung kjim": "soo hyung kim", # typo
-    "lee ju heon": "joo heon lee", # flipped format
     "jun pyo jhun": "jun pyo jeon", # typo
     "kyeong sik chu": "kyeong sik choo", # typo
-    "jo sung hyeon": "seong hyeon jo", # flipped format
-    "jo hyo won": "hyo won jo", # flipped format
-    "hwang sung woong": "seong woong hwang", # flipped format
-    "je hwan yu": "hwan yoo je", # flipped format
-    "hong ji hun": "ji hoon hong", # flipped format
-    "hong jae young": "jae young hong", # flipped format
-    "eom tae kyoung": "tae kyeong eom", # flipped format
-    "eom tae ho": "tae ho eom", # flipped format
     "kyoung youb youm": "kyeong yeob yeom", # typo
     "kyu jae cho": "kyu je cho", # typo
     "sa min chun": "sa min jeon", # typo
-    "yeong jin do": "yeong jin doo", # unique name, manual match
-    "il ryung kim": "il yoong kim", # unique name, manual match
-    "jung bong": "joong keun bong", # nickname
-    "ray choi": "kyeong hwan choi", # nickname
-    "jin jong kil": "jong kil jin", # flipped format
-    "deuk han yong": "deok han yong", # unique name, manual match
-    "yeo seung cheol": "seung cheol yeo", # flipped format
-    "choi yun cheol": "yoon cheol choi", # flipped format
     "gil ho song": "gil ho son", # typo
     "kyun eun noh": "kyeong eun noh", # typo
     "sae eop lim": "se eop lim", # typo
-    "jeung woo seok": "jeong woo seok", # unique name, manual match
-    "lee jung seok": "joong seok lee", # flipped format
-    "jo ho pyo": "ho pyo cho", # flipped format
     "sang guk pang": "sang kook park", # typo
-    "j.r. philllips": "j.r. phillips", # typo
-    "ohkamoto sinya": "okamoto sinya", # typo
     "jae kuk ryu": "je kuk ryu", # typo
     "jae weong seo": "jae eung seo", # typo
     "jae whan bae": "jae hwan bae", # typo
@@ -331,23 +311,15 @@ manual_handle_dict = {
     "jun kyu ryu": "joon kyu yoo", # typo (류)
     "san gil park": "sang il park", # space typo
     "gang yoo park": "kang woo park", # typo
-    "bubba smith": "charles smith", # unique name, manual match
-    "luis manuel de los santos martinez": "luis de los santos", # unique name, manual match
-    "michael serveneck": "mike cervenak", # typo
-    "gustavo karim garcia aguayo": "karim garcia", # unique name, manual match
-    "joshua lee josh bell": "josh bell", # unique name, manual match
-    "kevin heon ju lee": "kevin lee", # unique name, manual match
-    "eum jang yoon": "jang yoon eom", # flipped format
+    
     "gu sun jung" : "goo seon jung", # double u
     "bum jun park": "beom joon park", # double u
     "jun bum koo": "joon beom koo", # double u
     "jun suk choi": "joon seok choi", # double u
     "yun jun song": "yoon joon song", # double u
-    "byung hwee lee": "yoo chan lee", # changed name
-    "jae hyeon nam": "ha joon nam", # changed name
-    "jeong bin kim": "sa yoon kim", # changed name
-    "sung ho no": "geon woo noh", # changed name
-    "seung hwa lee": "woo min lee", # changed name
+    "su yun kim": "soo yoon kim", # double u
+
+    
     "chang hun choo": "chang hoon joo", # typo
     "dong sik chu": "dong sik joo", # typo
     "jong nam kim": "jeong nam kim", # typo
@@ -439,9 +411,20 @@ manual_handle_dict = {
     "young joo seo": "yong joo seo", # typo
     "tae hyon chung": "dae hyeon jeong", # typo
     "yil yeon choi": "il eon choi", # typo
+
+    
     "jae park song": "jae bak song", # unique name, manual match
     "gap jung kim": "kab joong kim", # unique name, manual match
     "ji hwuon yoo": "ji hwon yoo", # unique name, manual match
+    "yeong jin do": "yeong jin doo", # unique name, manual match
+    "il ryung kim": "il yoong kim", # unique name, manual match
+    "deuk han yong": "deok han yong", # unique name, manual match
+    "jeung woo seok": "jeong woo seok", # unique name, manual match
+    "duck gyoon hwang": "deok kyoon hwang", # unique name, manual match
+    "lang gyun gil": "rang gyun kil", # unique name, manual match
+    "mi r jeon": "mi reu jeon", # unique name, manual match
+    "kevin heon ju lee": "kevin lee", # unique name, manual match
+
     "chan gun lee": "chan geon lee", # mamually resolving u
     "dong kul lee": "dong geol lee", # manually resolving u
     "dong su kim": "dong soo kim", # manually resolving u
@@ -456,28 +439,7 @@ manual_handle_dict = {
     "jun gyu yu": "joon kyu yoo", # manually resolving u
     "kun woo park": "keon woo park", # manually resolving u
     "gun hee kim": "keon hyi kim", # manually resolving u
-    "chan moon": "chan jong moon", # nickname
-    "chang choi": "chang yang choi", # nickname
-    "chang moon": "chang hwan moon", # nickname
-    "heishu ohara": "byeong soo kang", # nickname
-    "minoru tanaka": "sil kim", # nickname
-    "mototomi yoshimura": "won boo ko", # nickname
-    "seung song": "seung joon song", # nickname
-    "ui jeon": "ui san jeon", # nickname
-    "jon mae": "brian mazone", # nickname
-    "dae won moon": "won moon", # changed name
-    "dong won lee": "tae oh lee", # changed name
-    "dong wook park": "keon woo park", # changed name
-    "jang hyeok yoo": "ro kyeol yoo", # changed name
-    "jong ki park": "so joon park", # changed name
-    "ji seon chae": "won hoo chae", # changed name
-    "yi hwan kim": "do hyeon kim", # changed name
-    "keon choi": "yi joon choi", # changed name
-    "sei hyok park": "se hyeok park", # changed name
-    "sung ki jung": "jin jeong", # changed name
-    "wang gi lee": "jae yool lee", # changed name
-    "yong su shin": "yoon hoo shin", # changed name
-    "gi hyun yang": "ji yool yang", # changed name
+    
     "pil jung jin": "pil joong jin", # removing 중 to handle jung (st)
     "jung il ryu": "joong il ryu",  # removing 중 to handle jung (st)
     "jung geun cho": "joong keun cho",  # removing 중 to handle jung (st)
@@ -496,6 +458,8 @@ manual_handle_dict = {
     "hun gon kim": "heon gon kim", # removing 헌 to handle hun (br)
     "hun do park": "heon do park", # removing 헌 to handle hun (br)
     "hun wook park": "heon wook park", # removing 헌 to handle hun (st)
+
+    
     "ho jun lee": "ho joon lee", # necessary to handle dup names (no 이호전)
     "hyun jun kim": "hyeon joon kim", # necessary to handle dup names (no 김현전)
     "hyeon su kim": "hyeon soo kim", # necessary to handle dup names (no 김현서)
@@ -514,44 +478,97 @@ manual_handle_dict = {
     "jae yul lee": "jae yool lee", # necessary to handle dup names (no 이재열)
     "jun hyeok heo": "joon hyeok heo", # necessary to handle dup names (no 허전혁)
     "jun hyuck park": "joon hyeok park", # necessary to handle dup names (no 박전혁)
+
+
     
+
+    ("heishu ohara", "1984-04-16"): "byeong soo kang",  # japanese kanji read in Korean
+    ("minoru tanaka", "1967-06-03"): "sil kim", # japanese kanji read in Korean
+    ("mototomi yoshimura", "1962-04-17"): "won boo ko",  # japanese kanji read in Korean
     
+    ("chan moon", "1991-03-23"): "chan jong moon", # nickname
+    ("chang choi", "1973-06-03"): "chang yang choi", # nickname
+    ("chang moon", "1975-07-09"): "chang hwan moon", # nickname
+    ("seung song", "1980-06-29"): "seung joon song", # nickname
+    ("ui jeon", "2000-11-25"): "ui san jeon", # nickname
+    ("jon mae", "1976-07-26"): "brian mazone", # nickname
+    ("jung bong", "1980-07-15"): "joong keun bong", # nickname
+    ("ray choi", "1972-05-12"): "kyeong hwan choi", # nickname
+
+    ("byung hwee lee", "1998-08-05"): "yoo chan lee", # changed name
+    ("jae hyeon nam", "1996-09-13"): "ha joon nam", # changed name
+    ("jeong bin kim", "1994-06-08"): "sa yoon kim", # changed name
+    ("sung ho no", "1989-10-22"): "geon woo noh", # changed name
+    ("seung hwa lee", "1982-05-04"): "woo min lee", # changed name
+    ("dae won moon", "1998-08-22"): "won moon", # changed name
+    ("dong won lee", "1993-12-15"): "tae oh lee", # changed name
+    ("dong wook park", "1985-04-06"): "keon woo park", # changed name
+    ("jang hyeok yoo", "2000-05-30"): "ro kyeol yoo", # changed name
+    ("jong ki park", "1995-01-21"): "so joon park", # changed name
+    ("ji seon chae", "1995-07-11"): "won hoo chae", # changed name
+    ("yi hwan kim", "2000-09-15"): "do hyeon kim", # changed name
+    ("keon choi", "1999-04-10"): "yi joon choi", # changed name
+    ("sei hyok park", "1990-01-09"): "se hyeok park", # changed name
+    ("sung ki jung", "1979-08-06"): "jin jeong", # changed name
+    ("wang gi lee", "1986-05-28"): "jae yool lee", # changed name
+    ("yong su shin", "1996-01-05"): "yoon hoo shin", # changed name
+    ("gi hyun yang", "1998-12-16"): "ji yool yang", # changed name
+    ("yeong hwan choi", "1992-02-20"): "seol woo choi", # changed name
+    ("tae woo kim", "1997-10-19"): "soo in kim", # changed name
+    ("min su kim", "1998-07-16"): "soo yoon kim", # changed name
+    ("ju hong park", "1999-08-20"): "seong woong park", # changed name
+    ("hyun min kim", "2000-02-23"): "geon kim", # changed name
+
+
+    # flipped format (last name + first name)
     
+    ("eum jang yoon", "2003-10-07"): "jang yoon eom", # flipped format
+    ("jo ho pyo", "1958-12-02"): "ho pyo cho", # flipped format
+    ("seok sang ho", "2000-04-14"): "sang ho seok", # flipped format
+    ("seol jae min", "1997-05-01"): "jae min seol", # flipped format
+    ("no gun woo", "1989-10-22"): "keon woo noh", # flipped format
+    ("noh jae won", "2001-07-26"): "jae won noh", # flipped format
+    ("nam yun sung", "1987-08-04"): "yoon seong nam", # flipped format
+    ("park tae won", "1992-02-17"): "tae won park", # flipped format
+    ("jo sung hyeon", "2002-08-06"): "seong hyeon cho", # flipped format
+    ("jo hyo won", "1999-03-10"): "hyo won cho", # flipped format
+    ("hwang sung woong", "1986-06-12"): "seong woong hwang", # flipped format
+    ("je hwan yu", "2000-09-30"): "hwan yoo je", # flipped format
+    ("hong ji hun", "1998-05-17"): "ji hoon hong",# flipped format
+    ("hong jae young", "1990-09-25"): "jae young hong", # flipped format
+    ("eom tae kyoung", "2003-05-03"): "tae kyeong eom", # flipped format
+    ("eom tae ho", "2001-01-03"): "tae ho eom", # flipped format
+    ("lee ju heon", "1969-11-17"): "joo heon lee",  # flipped format
+    ("yeo seung cheol", "1984-05-29"): "seung cheol yeo", # flipped format
+    ("choi yun cheol", "1989-10-24"): "yoon cheol choi", # flipped format
+    ("jin jong kil", "1981-09-23"): "jong kil jin", # flipped format
+    ("lee jung seok", "1998-07-27"): "joong seok lee", # flipped format
+    ("choi seol woo", "1992-02-20"): "seol woo choi", # flipped format
+
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    # "shin  ho lim": "shin ho lim", # extra space
-    # "chang  yang choi": "chang yang choi", # extra space
-    # "dan woo  kim": "dan woo kim", # extra space
+    ("young hun cho", "1987-10-29"): "yong hoon cho", # wrong name
+    ("young ho lee", "1970-05-06"): "yong ho lee", # wrong name
+    ("tae yeoung kim", "1980-04-07"): "tae yeong kim", # name typo
+    ("tae soo kim", "1982-09-27"): "tae goo kim", # wrong name
+    ("seung min choi", "1990-07-31"): "seong min choi", # wrong name
+    ("keong soo min", "1981-05-19"): "kyeong soo min", # wrong name
+    ("jong ho kim", "1973-05-24"): "dong ho kim", # wrong name
+    ("hyeon jong choi", "1992-12-03"): "hyeon jeong choi", # wrong name
+
+
+    ("myeong jin oh", "2001-04-09"): ("myeong jin oh", "2001-09-04"), # mismatching birthday
+    ("joon hyoung kim", "2002-12-07"): ("joon hyeong kim", "2002-07-12"), # mismatching birthday
+    ("hyeon seung jung", "2001-10-24"): ("hyeon seung jeong", "2001-01-24"), # mismatching birthday
+    ("jong soo chung", "1980-06-08"): ("jong soo jeong", "1980-05-08"), # mismatching birthday
+    ("jin soo lim", "1972-02-01"): ("jin soo lim", "1972-02-21"), # mismatching birthday
+    ("ji heon jung", "2003-12-11"): ("ji heon jeong", "2003-01-01"), # mismatching birthday
+    ("ho jung lee", "1992-10-13"): ("ho joong lee", "1992-10-03"), # mismatching birthday
+    ("dong hun lee", "1996-07-24"): ("si won lee", "1996-07-24"), # mismatching birthday
+    ("do been kim", "2001-01-05"): ("do been kim", "2001-01-15"), # mismatching birthday
+    ("chul woo park", "1991-01-19"): ("cheol woo park", "1991-01-29"), # mismatching birthday
+    ("yong ho lee", "2012-01-01"): ("yong ho lee", "1988-05-07"), # wrong birthday
+    ("won kuk lee", "1948-05-10"): ("won kuk lee", "1949-05-10"), # mismatching birthday
+
 }
 
 first_name_dict_eng = {
@@ -601,4 +618,35 @@ first_name_dict_eng = {
     "vincent": "vinny",
     "william": "will",
     "zachary": "zach",
+}
+
+# maniuplate birthday when a single player has two different dates of birth.
+# If Korean, follow Statiz side. Otherwise, follow Basebasll Reference side.
+# dob_dict_kr = {
+#     "Chul Woo Park": "1991-01-29",
+#     "Do Been Kim": "2001-01-15",
+#     "Ho Jung Lee": "1992-10-03",
+    
+# }
+
+dob_dict_non_kr = {
+    "Israel Alcantara": "1973-05-06",
+    "Michael Anderson": "1966-07-30",
+    "Boi Rodriguez": "1966-04-14",
+    "George Anthony Canale": "1965-08-11",
+    "Michael Serveneck": "1976-08-17",
+    "Gerrod Jay Davis": "1970-10-03",
+    "Julio Franco": "1958-08-23",
+    "Luther Hackman": "1974-10-10",
+    "Ken Kadokura": "1973-07-29",
+    "Doug Linton": "1965-02-09",
+    "Mendy Lopez": "1973-10-15",
+    "Alessandro Maestri": "1985-06-01",
+    "Roberto Antonio Petagine": "1971-06-07",
+    "Bienvenido Rivera": "1968-01-11",
+    "Runelvys Hernandez": "1978-04-27",
+    "Jacob Edward Turner": "1991-05-21",
+    "Efrain Valdez": "1966-07-11",
+    "Darrin Winston": "1966-07-06",
+    "Julian Yan": "1965-07-24",
 }

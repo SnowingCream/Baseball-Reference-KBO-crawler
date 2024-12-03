@@ -164,12 +164,30 @@ def kor_handle_u(row: pd.DataFrame, candidates: set[str]) -> str:
     return row['name_new']
     
     
-def manual_check(name: str) -> str: 
+def manual_check(row: pd.DataFrame) -> pd.DataFrame: 
 
-    if name in manual_handle_dict:
-        return manual_handle_dict[name]
+    tuple_key = (row["name_new"], row["date_of_birth"])
+    str_key = row["name_new"]
 
-    return name
+    if tuple_key in manual_handle_dict:
+        if type(manual_handle_dict[tuple_key]) is tuple:
+            row["name_new"] = manual_handle_dict[tuple_key][0]
+            row["date_of_birth"] = manual_handle_dict[tuple_key][1]
+            return row
+        if type(manual_handle_dict[tuple_key]) is str:
+            row["name_new"] = manual_handle_dict[tuple_key]
+            return row
+    if str_key in manual_handle_dict:
+        row["name_new"] = manual_handle_dict[str_key]
+        return row
+
+    return row
+    
+        
+    # if name in manual_handle_dict:
+    #     return manual_handle_dict[name]
+
+    # return name
 
 def eng_remove_jr(name: str) -> str:
     
@@ -333,8 +351,8 @@ def manual_merge(inner: pd.DataFrame, outer: pd.DataFrame, criterion: Callable[[
         raise SystemExit('Not a valid criterion function name')
     
     
-    new_inner = pd.merge(df_br, df_st, on='name_new', how='inner')
-    new_outer = pd.merge(df_br, df_st, on='name_new', how='outer')
+    new_inner = pd.merge(df_br, df_st, on=['name_new', 'date_of_birth'], how='inner')
+    new_outer = pd.merge(df_br, df_st, on=['name_new', 'date_of_birth'], how='outer')
     # new_outer = new_outer.drop(columns=['url'])
     new_outer = new_outer[new_outer.isna().any(axis=1)]
 
