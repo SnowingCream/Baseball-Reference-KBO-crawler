@@ -3,10 +3,6 @@
 ### Moviation
 Baseball Reference recently added a section for KBO (Korea Baseball Organization) players (https://www.baseball-reference.com/register/korean-baseball-league-stats.shtml). While it contains a noticeable amount of players (3405 players as of 12/04/2024), Its accessbility is not very practical, since there is no standard of English notation for those players' Korean names.
 
-![BR STATUS 1](image/BR_status1.png?raw=true)
-![BR STATUS 2](image/BR_status2.png?raw=true)
-
-
 ### Goal
 The goal of this project was to provide the connection between Baseball Reference and Statiz (https://statiz.sporki.com/), which is a sabermetrics website for KBO. It will help those who know Korean access the player's data in Baseball Reference with the Korean name, and those who found Korean player's record in Baseball Reference can get the player's game in Korean.
 
