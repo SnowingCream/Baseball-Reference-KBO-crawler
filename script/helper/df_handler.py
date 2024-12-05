@@ -1,59 +1,20 @@
 import pandas as pd
 from typing import Callable, Union
-from helper.ref_dict import last_name_dict_kor, first_name_dict_kor, first_name_dict_eng, manual_handle_dict, recover_dash_dict
+from helper.ref_dict import last_name_dict_kor, first_name_dict_kor, recover_dash_dict, manual_handle_dict, first_name_dict_eng, dob_dict_eng
 from collections import defaultdict
 
 
+'''
+Behavior: insert '-' for Korean players whose name miss it.
+Usage: used to make sure all Korean players with given name that has more than 1 character have '-'.
+'''
 def recover_dash(name: str) -> str:
     if name in recover_dash_dict:
         return recover_dash_dict[name]
     return name
 
-def remove_double_dash(name: str) -> str:
-
-    
-    if name in recover_dash_dict:
-        return recover_dash_dict[name]
-    return name
-
-def check_uniqueness(candidate_1: str, candidate_2: str, default_return: str, checker: set[str]) -> str:
-
-    if candidate_1 in checker and candidate_2 in checker:
-        print(f"given name: {default_return} -> both exist")
-        return default_return
-    if candidate_1 not in checker and candidate_2 not in checker:
-        print(f"given name: {default_return} -> neither exists")
-        return default_return
-    if candidate_1 in checker:
-        print(f"given name: {default_return} -> found the unique match")
-        return candidate_1
-    if candidate_2 in checker:
-        print(f"given name: {default_return} -> found the unique match")
-        return candidate_2
-
 '''
-Helper function 1
-Behavior: Parse the given name and return the first and last name (in terms of word, not character) -> use it for English name only.
-Usage: used to extract first and last name of non-Korean players, which resolved a decent amount of naming conflict.
-'''
-
-def eng_get_first_and_last(name: str) -> str:
-    split = name.split(" ")
-
-    # 'jr' is not helpful for distinguishing players
-    if 'jr' in split[-1]:
-        split = split[-1]
-    
-    if len(split) > 2:
-        return split[0] + " " + split[-1]
-    else:
-        return " ".join(split)
-
-
-
-'''
-Helper function 2
-Behavior: Parse the given full name and return the last name (in terms of character, not word) -> use it for Korean name only.
+Behavior: parse the given full name and return the last name (in terms of character, not word) -> use it for Korean name only.
 Usage: used to check if players with rare last name exist (otherwise merge them into the common notation for that last name to resolve naming conflict)
 '''
 def kor_get_last(name_kor_list: list[str], last_name: str) -> list[str]:
@@ -65,8 +26,7 @@ def kor_get_last(name_kor_list: list[str], last_name: str) -> list[str]:
 
 
 '''
-Helper function 3
-Behavior: Parse the given full name and check if the last name is in the last_name_dict_kor for generalization (a consistent notation for last names), and if so, update it.
+Behavior: parse the given full name and check if the last name is in the last_name_dict_kor and update it.
 Usage: used to generalize last names to reduce naming conflict.
 '''
 def kor_update_last(name: str) -> str:
@@ -80,8 +40,7 @@ def kor_update_last(name: str) -> str:
         return name
 
 '''
-Helper function 4
-Behavior: Parse the given full name and check if the first name is in the first_name_dict for generalization (a consistent notation for first names), and if so, update it.
+Behavior: parse the given full name and check if the first name is in the first_name_dict and update it.
 Usage: used to generalize first names to reduce naming conflict.
 '''
 def kor_update_first(name: str) -> str:
@@ -94,11 +53,30 @@ def kor_update_first(name: str) -> str:
                 first_name_split[i] = first_name_dict_kor[first_name_split[i]]
         return " ".join(first_name_split) + " " + name_split[-1]
     return name
-                
+
+'''
+Bahavior: check if only one candidate exists in the checker. If so, return that candidate. Otherwise, return the default_return.
+Usage: used to resolve cases for 'u', which has 2 possible interpretations (eo & oo). If only 1 of them exists, update so. Otherwise leave as it is.
+'''
+def check_uniqueness(candidate_1: str, candidate_2: str, default_return: str, checker: set[str]) -> str:
+
+    if candidate_1 in checker and candidate_2 in checker:
+        # print(f"given name: {default_return} -> both exist")
+        return default_return
+    if candidate_1 not in checker and candidate_2 not in checker:
+        # print(f"given name: {default_return} -> neither exists")
+        return default_return
+    if candidate_1 in checker:
+        # print(f"given name: {default_return} -> found the unique match")
+        return candidate_1
+    if candidate_2 in checker:
+        # print(f"given name: {default_return} -> found the unique match")
+        return candidate_2
+
     
 '''
-Helper function 5
-Usage: specifically handling 'u'
+Behavior: specifically handling English notation 'u'
+Usage: used to handle common usage of 'u': only 1 'u' in the name and only one of its variation exists on the other side.
 '''
 def kor_handle_u(row: pd.DataFrame, candidates: set[str]) -> str:
 
@@ -108,23 +86,20 @@ def kor_handle_u(row: pd.DataFrame, candidates: set[str]) -> str:
     if len(name_split) > 1:
         first_name_split = name_split[:-1]
 
-        # 'eu' is fine, it has only 1 matching pronuncation ('ㅡ')
         # if the first name has more than 1 Korean character, need to check if there are several 'u's.
         # if there is no 'u' or more than 1 'u', cannot handle it -> return the original value.
         if len(first_name_split) > 1:
             count = 0
             for name in first_name_split:
+                # 'eu' is fine, it has only 1 matching pronuncation ('ㅡ')
                 if 'u' in name and 'eu' not in name:
                     count += 1
             if not count:
-                # print(f"given name: {row['name_new']} -> at least than 2 charcters, no 'u'")
                 return row['name_new']
             if count == len(first_name_split):
-                print(f"given name: {row['name_new']} -> at least than 2 charcters, all 'u' (count: {count})")
                 return row['name_new']
         else:
             if 'u' not in first_name_split[0]:
-                # print(f"given name: {row['name_new']} -> 1 character with no 'u'")
                 return row['name_new']
                 
         # once confirmed there is only 1 'u', find that character.
@@ -142,28 +117,14 @@ def kor_handle_u(row: pd.DataFrame, candidates: set[str]) -> str:
                 first_name_copy_eo[i] = first_name_copy_eo[i].replace('u', 'eo')
                 first_name_copy_eo = " ".join(first_name_copy_eo) + " " + name_split[-1]
 
-                # print(f"given name: {row['name_new']} -> oo: {first_name_copy_oo}, eo: {first_name_copy_eo}")
-
-                # if first_name_copy_oo not in candidates and first_name_copy_eo not in candidates:
-                #     print(f"given name: {row['name_new']} -> neither exists")
-                #     return row['name_new']
-                # if first_name_copy_oo in candidates and first_name_copy_eo in candidates:
-                #     print(f"given name: {row['name_new']} -> both exist")
-                #     return row['name_new']
-                # if first_name_copy_oo in candidates:
-                #     print(f"given name: {row['name_new']} -> found the unique match")
-                #     return first_name_copy_oo
-                # if first_name_copy_eo in candidates: 
-                #     print(f"given name: {row['name_new']} -> found the unique match")
-                #     return first_name_copy_eo
-
                 return check_uniqueness(first_name_copy_oo, first_name_copy_eo, row['name_new'], candidates)
-
-        # print(f"given name: {row['name_new']} -> what case is this???") -> never happens
 
     return row['name_new']
     
-    
+'''
+Behavior: update the given row with manual_handle_dict, which has two types of key: str, tuple(str, str) and two types of value: str, tuple(str, str)
+Usage: used to handle cases that require 1-to-1 correction for unique cases, such as typo, flipped format, changed name, etc.
+'''
 def manual_check(row: pd.DataFrame) -> pd.DataFrame: 
 
     tuple_key = (row["name_new"], row["date_of_birth"])
@@ -182,13 +143,23 @@ def manual_check(row: pd.DataFrame) -> pd.DataFrame:
         return row
 
     return row
-    
-        
-    # if name in manual_handle_dict:
-    #     return manual_handle_dict[name]
 
-    # return name
+'''
+Behavior: update the birthday of non-Korean players (follow BR)
+Usage: used for pre-processing before the merge.
+       ONLY FOR ST SIDE
+'''
+def eng_update_birthday(row: pd.DataFrame) -> pd.DataFrame:
 
+    if row['name_eng'] in dob_dict_eng:
+        row['date_of_birth'] = dob_dict_eng[row['name_eng']]
+
+    return row
+
+'''
+Behavior: remove 'jr' if it exists at the end for non-Korean players.
+Usage: used for pre-processing before the merge.
+'''
 def eng_remove_jr(name: str) -> str:
     
     name_split = name.split(" ")
@@ -198,24 +169,31 @@ def eng_remove_jr(name: str) -> str:
         
     return name
 
-
+'''
+Behavior: merge based on the fact that there are not very many non-Korean players, which lowers the change of having two players with the same last name.
+          if the given last name only exists once on both side, it means there is a single player with that last name (therefore appears only once on each side).
+Usage: first criterion for merging non-Korean players. Used in manual merge.
+'''
 def eng_handle_rare_last_name(row: pd.DataFrame, last_name_total: dict[str, int], last_name_st: dict[str, int], last_name_br: dict[str, int]) -> str:
 
     last_name = row['name_new'].split(" ")[-1]
 
-    # if the last name only appears once per each side and therefore total of 2, then it is a single player with that last name.
     if last_name_total[last_name] == 2 and last_name_st[last_name] == 1 and last_name_br[last_name] == 1:
         return last_name + " (unique last name)"
 
     return row['name_new']
 
-# only works from the statiz side, because it made sure that all Korean players has '-' in their name (single first name doesn't apply, but still can be handled by checking the number of letters inside the function)
-# use dict unlike handle u function, because non-Korean players
+
+'''
+Behavior: merge based on the fact that BR usually has a player's abbreviated name or nickname, while ST contains the full legal name.
+          based on the length of given name, try several methods for possible matching.
+Usage: second criterion for merging non-Korean players. Used in manual merge.
+       ONLY WORKS FOR ST SIDE TRYING TO FIND A MATCH IN BR.
+'''
 def eng_check_possible_match(row: pd.DataFrame, br_candidates: set[str]) -> str:
 
     # if the english name doesn't contain '-', it is a Korean player.
     if "-" in row['name_eng_y']: 
-        # print(f"given name: {row['name_new']} -> not a valid input")
         return row['name_new']
 
     name_split = row["name_new"].split(" ")
@@ -227,7 +205,6 @@ def eng_check_possible_match(row: pd.DataFrame, br_candidates: set[str]) -> str:
         # sometimes names are flipped (usually japanese players)
         name_candidate = name_split[-1] + " " + name_split[0]
         if name_candidate in br_candidates:
-            print(f"given name: {row['name_new']} -> found the unique match")
             return name_candidate
         
 
@@ -236,23 +213,25 @@ def eng_check_possible_match(row: pd.DataFrame, br_candidates: set[str]) -> str:
             name_split[0] = first_name_dict_eng[name_split[0]]
             name_candidate = ' '.join(name_split)
             
-            # if the substituted name exists, up date it.
+            # if the substituted name (possible nickname) exists, update it.
             if name_candidate in br_candidates:
-                print(f"given name: {row['name_new']} -> found the unique match")
                 return name_candidate
         return row['name_new']
 
+    # this is the case for players whose name contains the middle name.
     elif len(name_split) == 3:
 
         
-        name_candidate_1 = name_split[0] + " " + name_split[-1]
-        name_candidate_2 = name_split[0] + " " + name_split[1]
+        name_candidate_1 = name_split[0] + " " + name_split[-1] # first + last
+        name_candidate_2 = name_split[0] + " " + name_split[1] # first + middle
 
         check_original = check_uniqueness(name_candidate_1, name_candidate_2, row['name_new'], br_candidates)
 
+        # if only one of them exists, return it.
         if check_original != row['name_new']:
             return check_original
 
+        # if both or neither exists, try the same with the first name's possible nickname.
         if name_split[0] in first_name_dict_eng:
 
             name_split[0] = first_name_dict_eng[name_split[0]]
@@ -260,64 +239,39 @@ def eng_check_possible_match(row: pd.DataFrame, br_candidates: set[str]) -> str:
             name_candidate_2 = name_split[0] + " " + name_split[1]
             
             return check_uniqueness(name_candidate_1, name_candidate_2, row['name_new'], br_candidates)
-
+    
         else:
             return row['name_new']
 
-
-        # if name_candidate_1 not in br_candidates and name_candidate_2 not in br_candidates:
-        #     print(f"given name: {row['name_new']} -> neither exists, repeat the same with nicknames")
-
-        #     if name_split[0] in first_name_dict_eng:
-        #         name_candidate_1[0] = first_name_dict_eng[name_split[0]]
-        #         name_candidate_2[0] = first_name_dict_eng[name_split[0]]
-                
-            
-        #     return row['name_new']
-        # if name_candidate_1 in br_candidates and name_candidate_2 in br_candidates:
-        #     print(f"given name: {row['name_new']} -> both exist")
-        #     return row['name_new']
-        # if name_candidate_1 in br_candidates:
-        #     potential_dup = name_candidate_1.split(" ")
-        #     if potential_dup[0] in first_name_dict_eng:
-        #         potential_dup[0] = first_name_dict_eng[potential_dup[0]]
-        #         potential_dup = ' '.join(potential_dup)
-        #         if potential_dup in br_candidates:
-        #             print(f"given name: {row['name_new']} -> potential dup (nickname) exists!!!!!!!!!!")
-        #             return row['name_new']
-        #     print(f"given name: {row['name_new']} -> found the unique match")
-        #     return name_candidate_1        
-        # if name_candidate_2 in br_candidates:
-        #     potential_dup = name_candidate_2.split(" ")
-        #     if potential_dup[0] in first_name_dict_eng:
-        #         potential_dup[0] = first_name_dict_eng[potential_dup[0]]
-        #         potential_dup = ' '.join(potential_dup)
-        #         if potential_dup in br_candidates:
-        #             print(f"given name: {row['name_new']} -> potential dup (nickname) exists!!!!!!!!!!")
-        #             return row['name_new']
-        #     print(f"given name: {row['name_new']} -> found the unique match")
-        #     return name_candidate_2  
-            
+    # players from latin-america often have the full names with length 4.
     elif len(name_split) == 4:
+        # check the first and third name in BR (the most common case)
         name_candidate = name_split[0] + " " + name_split[2]
         if name_candidate in br_candidates:
-            print(f"given name: {row['name_new']} -> found the unique match")
             return name_candidate
 
         return row['name_new']
         
-    
     else:
-        print(f"given name: {row['name_new']} -> has not been implemented yet")
         return row['name_new']
 
 
+'''
+Behavior:
+    1. separate 'outer' into BR and ST (the rows that failed to find its match)
+    2. apply manipulation based on 'criterion'.
+    3. try merging and concatenate the outcome to 'inner'.
+Usage: used for manual merge after the first merge.
+'''
 def manual_merge(inner: pd.DataFrame, outer: pd.DataFrame, criterion: Callable[[pd.DataFrame, set[str]], str]) -> tuple[pd.DataFrame, pd.DataFrame]:
 
+    # generate new starting points for the next merge.
     df_br = outer[outer['name_eng_y'].isna()].dropna(axis=1)
     df_st = outer[outer['name_eng_x'].isna()].dropna(axis=1)
 
+    # then update those with given criterion.
 
+    # option 1
     if criterion.__name__ == 'kor_handle_u':
 
         df_br_set = set(df_br["name_new"].to_list())
@@ -326,6 +280,7 @@ def manual_merge(inner: pd.DataFrame, outer: pd.DataFrame, criterion: Callable[[
         df_br['name_new'] = df_br.apply(kor_handle_u, args=(df_st_set,), axis=1)
         df_st['name_new'] = df_st.apply(kor_handle_u, args=(df_br_set,), axis=1)
 
+    # option 2
     elif criterion.__name__ == 'eng_handle_rare_last_name':
 
         last_name_total, last_name_st, last_name_br = defaultdict(int), defaultdict(int), defaultdict(int)
@@ -343,17 +298,18 @@ def manual_merge(inner: pd.DataFrame, outer: pd.DataFrame, criterion: Callable[[
         df_br['name_new'] = df_br.apply(eng_handle_rare_last_name, args=(last_name_total, last_name_st, last_name_br), axis=1)
         df_st['name_new'] = df_st.apply(eng_handle_rare_last_name, args=(last_name_total, last_name_st, last_name_br), axis=1)        
 
+    # option 3
     elif criterion.__name__ == 'eng_check_possible_match':
         df_br_set = set(df_br["name_new"].to_list())
         df_st['name_new'] = df_st.apply(eng_check_possible_match, args=(df_br_set,), axis=1)
     
     else:
         raise SystemExit('Not a valid criterion function name')
+
     
-    
+    # merge the updated tables and concatenate its outome to the original merged table.
     new_inner = pd.merge(df_br, df_st, on=['name_new', 'date_of_birth'], how='inner')
     new_outer = pd.merge(df_br, df_st, on=['name_new', 'date_of_birth'], how='outer')
-    # new_outer = new_outer.drop(columns=['url'])
     new_outer = new_outer[new_outer.isna().any(axis=1)]
 
     return pd.concat([inner, new_inner], axis=0), new_outer

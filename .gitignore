@@ -1,5 +1,6 @@
 .ipynb_checkpoints/
 __pycache__/
 
-plan.txt
 script/test.ipynb
+data/br_finished_team_year.csv
+data/st_finished_team_year.csv
