@@ -3,8 +3,8 @@
 ### Moviation
 Baseball Reference recently added a section for KBO (Korea Baseball Organization) players (https://www.baseball-reference.com/register/korean-baseball-league-stats.shtml). While it contains a noticeable amount of players (3405 players as of 12/04/2024), Its accessbility is not very practical, since there is no standard of English notation for those players' Korean names.
 
-![BR STATUS 1](images/BR_status1.png?raw=true)
-![BR STATUS 2](images/BR_status2.png?raw=true)
+![BR STATUS 1](image/BR_status1.png?raw=true)
+![BR STATUS 2](image/BR_status2.png?raw=true)
 
 
 ### Goal
