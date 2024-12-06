@@ -20,7 +20,6 @@ Then, those csv tables are merged, based on the player's name and birthday. Sinc
     - st_player.csv: crawled players data from Statiz
     - merged.csv: merged output of br_player and st_player
     - left_off.csv: the rest of st_player after merging. This is because Statiz has more players than Baseball Reference
-- image(repo): contains screenshots for README.md (you will not need these).
 - script(repo): contains codes for crawling and merging.
     - br_player.ipynb: crawling players' data from Baseball Reference
     - br_team_year.ipynb: crawling teams' data from Baseball Reference
